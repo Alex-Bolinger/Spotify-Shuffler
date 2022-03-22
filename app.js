@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 
 var client_id = '6efee3b755b94846aea5a6a7cb8bca61'; // Your client id
 var client_secret = '19d6f6eea72649bba6521c67e73bb02b'; // Your secret
-var redirect_uri = 'alexpi.ddns.net'; // Your redirect uri
+var redirect_uri = 'https://spotify-shuffler3514.herokuapp.com/'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
