@@ -264,8 +264,8 @@ function shuffle(myHeaders, data, userData) {
                 sendURIs[j - i * 100] = uris[j];
             }
         }
-        console.log(sendURIs);
-        console.log(sendURIs.length)
+        //console.log(sendURIs);
+        //console.log(sendURIs.length)
         let requestOpt = {
             method: "POST",
             headers: myHeaders,
@@ -276,7 +276,7 @@ function shuffle(myHeaders, data, userData) {
         fetch("https://api.spotify.com/v1/playlists/" + userData[2] + "/tracks", requestOpt)
         .then(response => response.text())
         .then(result => {
-            //console.log(JSON.parse(result));
+            console.log(JSON.parse(result));
         })
     }
     return 200;
