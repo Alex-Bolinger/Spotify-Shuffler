@@ -6,6 +6,8 @@
 <script>
     function select() {
         let id = document.getElementById("pid").value;
-        window.location.replace("https://spotify-shuffler3514.herokuapp.com/shuffle?id=" + id);
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://spotify-shuffler3514.herokuapp.com/shuffle?id=" + id, true);
+        xhr.send();
     }
 </script>
