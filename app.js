@@ -127,6 +127,7 @@ app.get('/select', function(req, res) {
 })
 
 app.post('/shuffle', function(req, res) {
+    console.log('begin shuffle')
     let playlistID = req.query.id;
     let access_token = req.query.access_token;
     var myHeaders = new Headers();
