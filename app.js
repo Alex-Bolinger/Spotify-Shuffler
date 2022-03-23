@@ -154,6 +154,7 @@ app.post('/shuffle', function(req, res) {
         res.sendStatus(success);
     })
     .catch(error => {
+        console.log(error);
         res.sendStatus(404);
     });
 })
