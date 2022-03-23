@@ -127,7 +127,6 @@ app.get('/select', function(req, res) {
 })
 
 app.post('/shuffle', function(req, res) {
-    console.log('begin shuffle')
     let playlistID = req.query.id;
     let access_token = req.query.access_token;
     var myHeaders = new Headers();
@@ -158,7 +157,6 @@ app.post('/shuffle', function(req, res) {
     .catch(error => {
         console.log(error);
     });
-    res.sendStatus(success);
 })
 
 app.get('/refresh_token', function(req, res) {
@@ -186,7 +184,6 @@ app.get('/refresh_token', function(req, res) {
 });
 
 function loop(totalSize, requestOptions, myHeaders, data, userData) {
-    console.log('loop')
     fetch("https://api.spotify.com/v1/playlists/" + userData[2] + "/tracks?limit=100&offset=" + totalSize, requestOptions)
     .then(response => response.text())
     .then(result => {
@@ -207,7 +204,6 @@ function loop(totalSize, requestOptions, myHeaders, data, userData) {
 }
 
 function createNewPlaylist(myHeaders, data, userData) {
-    console.log('make playlist')
     let requestOpt = {
         method: 'POST',
         headers: myHeaders,
@@ -223,13 +219,11 @@ function createNewPlaylist(myHeaders, data, userData) {
     .then(result => {
         //console.log(JSON.parse(result));
         userData.push(JSON.parse(result).id);
-        console.log(userData[3]);
         return shuffle(myHeaders, data, userData);
     });
 }
 
 function shuffle(myHeaders, data, userData) {
-    console.log('shuffle')
     var newOrder = [];
     for (let i = 0; i < data.length; i++) {
         newOrder[i] = null;
