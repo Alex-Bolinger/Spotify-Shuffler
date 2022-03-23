@@ -222,7 +222,7 @@ function createNewPlaylist(myHeaders, data, userData) {
     .then(response => response.text())
     .then(result => {
         //console.log(JSON.parse(result));
-        userData.push(result.id);
+        userData.push(JSON.parse(result).id);
         console.log(userData[3]);
         return shuffle(myHeaders, data, userData);
     });
