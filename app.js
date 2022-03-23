@@ -151,7 +151,7 @@ app.post('/shuffle', function(req, res) {
         }
         userData.push(res.owner.id);
         userData.push(res.name);
-        userData.push(playlistID;)
+        userData.push(playlistID);
         let success = loop(size, requestOptions, myHeaders, data, userData);
         res.sendStatus(success);
     })
