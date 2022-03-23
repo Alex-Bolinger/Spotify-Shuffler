@@ -119,7 +119,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/select', function(req, res) {
-    res.sendFile("select.html", err => {
+    res.sendFile(app.path() + "select.html", err => {
         if (err != null) {
             console.log(err);
         }
