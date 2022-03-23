@@ -128,6 +128,7 @@ app.get('/select', function(req, res) {
 
 app.post('/shuffle', function(req, res) {
     let playlistID = req.query.id;
+    let access_token = req.query.access_token;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", "Bearer " + access_token);
