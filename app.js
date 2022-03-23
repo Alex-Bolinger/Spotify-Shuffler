@@ -157,7 +157,6 @@ app.post('/shuffle', function(req, res) {
     })
     .catch(error => {
         console.log(error);
-        res.sendStatus(404);
     });
 })
 
@@ -222,6 +221,7 @@ function createNewPlaylist(myHeaders, data, userData) {
     .then(response => response.text())
     .then(result => {
         //console.log(JSON.parse(result));
+        userData.push(result.id);
         return shuffle(myHeaders, data, userData);
     });
 }
@@ -273,7 +273,7 @@ function shuffle(myHeaders, data, userData) {
                 uris: sendURIs
             })
         };
-        fetch("https://api.spotify.com/v1/playlists/" + userData[2] + "/tracks", requestOpt)
+        fetch("https://api.spotify.com/v1/playlists/" + userData[3] + "/tracks", requestOpt)
         .then(response => response.text())
         .then(result => {
             console.log(JSON.parse(result));
