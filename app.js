@@ -149,7 +149,7 @@ app.post('/shuffle', function(req, res) {
         }
         userData.push(res.owner.id);
         userData.push(res.name);
-        let success = loop(size);
+        let success = loop(size, requestOptions, myHeaders);
         res.sendStatus(success);
     })
     .catch(error => {
@@ -181,7 +181,7 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-function loop(totalSize) {
+function loop(totalSize, requestOptions, myHeaders) {
     fetch("https://api.spotify.com/v1/playlists/2yGaAFCB7mwH4m5SEKNO5S/tracks?limit=100&offset=" + totalSize, requestOptions)
     .then(response => response.text())
     .then(result => {
@@ -191,9 +191,9 @@ function loop(totalSize) {
             for (let i = 0; i < res.items.length; i++) {
                 data.push(res.items[i]);
             }
-            return loop(totalSize + size);
+            return loop(totalSize + size, requestOptions, myHeaders);
         } else {
-            return createNewPlaylist();
+            return createNewPlaylist(myHeaders);
         }
     })
     .catch(error => {
@@ -201,7 +201,7 @@ function loop(totalSize) {
     });
 }
 
-function createNewPlaylist() {
+function createNewPlaylist(myHeaders) {
     let requestOpt = {
         method: 'POST',
         headers: myHeaders,
@@ -217,11 +217,11 @@ function createNewPlaylist() {
     .then(result => {
         //console.log(JSON.parse(result));
         playListID.push(JSON.parse(result).id);
-        return shuffle();
+        return shuffle(myHeaders);
     });
 }
 
-function shuffle() {
+function shuffle(myHeaders) {
     var newOrder = [];
     for (let i = 0; i < data.length; i++) {
         newOrder[i] = null;
