@@ -183,6 +183,7 @@ app.get('/refresh_token', function(req, res) {
 });
 
 function loop(totalSize, requestOptions, myHeaders) {
+    console.log('loop')
     fetch("https://api.spotify.com/v1/playlists/2yGaAFCB7mwH4m5SEKNO5S/tracks?limit=100&offset=" + totalSize, requestOptions)
     .then(response => response.text())
     .then(result => {
@@ -203,6 +204,7 @@ function loop(totalSize, requestOptions, myHeaders) {
 }
 
 function createNewPlaylist(myHeaders) {
+    console.log('make playlist')
     let requestOpt = {
         method: 'POST',
         headers: myHeaders,
@@ -223,6 +225,7 @@ function createNewPlaylist(myHeaders) {
 }
 
 function shuffle(myHeaders) {
+    console.log('shuffle')
     var newOrder = [];
     for (let i = 0; i < data.length; i++) {
         newOrder[i] = null;
