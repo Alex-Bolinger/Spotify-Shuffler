@@ -31,6 +31,10 @@ app.use(express.static(__dirname + '/public'))
    .use(cors())
    .use(cookieParser());
 
+app.get('/', function(req, res) {
+    res.send('index');
+})
+
 app.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
