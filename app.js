@@ -1,8 +1,13 @@
-var express = require('express'); // Express web server framework
-var request = require('request'); // "Request" library
-var cors = require('cors');
-var querystring = require('querystring');
-var cookieParser = require('cookie-parser');
+import express from 'express' // Express web server framework
+import request from 'request' // "Request" library
+import cors from 'cors'
+import querystring from 'querystring'
+import cookieParser from 'cookie-parser'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import fetch from 'node-fetch'
+import { Headers } from 'node-fetch';
+import { FormData } from 'node-fetch';
 
 var client_id = '6efee3b755b94846aea5a6a7cb8bca61'; // Your client id
 var client_secret = '19d6f6eea72649bba6521c67e73bb02b'; // Your secret
@@ -27,7 +32,7 @@ var stateKey = 'spotify_auth_state';
 
 var app = express();
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(path.dirname(fileURLToPath(import.meta.url)) + '/public'))
    .use(cors())
    .use(cookieParser());
 
@@ -95,7 +100,7 @@ app.get('/', function(req, res) {
             });
 
         // we can also pass the token to the browser to make requests from there
-            res.redirect('/#' +
+            res.redirect('/select#' +
             querystring.stringify({
                 access_token: access_token,
                 refresh_token: refresh_token
@@ -112,6 +117,44 @@ app.get('/', function(req, res) {
       res.send('index');
   }
 });
+
+app.get('/select', function(req, res) {
+    res.sendFile("select.html", err => {
+        if (err != null) {
+            console.log(err);
+        }
+    })
+})
+
+app.post('/shuffle', function(req, res) {
+    let playlistID = req.query.id;
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", "Bearer " + access_token);
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+    var userData = [];
+
+    fetch("https://api.spotify.com/v1/playlists/" + playlistID, requestOptions)
+    .then(response => response.text())
+    .then(result => {
+        let res = JSON.parse(result);
+        let size = res.tracks.items.length;
+        for (let i = 0; i < res.tracks.items.length; i++) {
+            data.push(res.tracks.items[i]);     
+        }
+        userData.push(res.owner.id);
+        userData.push(res.name);
+        let success = loop(size);
+        res.sendStatus(success);
+    })
+    .catch(error => {
+        res.sendStatus(404);
+    });
+})
 
 app.get('/refresh_token', function(req, res) {
 
@@ -136,6 +179,101 @@ app.get('/refresh_token', function(req, res) {
     }
   });
 });
+
+function loop(totalSize) {
+    fetch("https://api.spotify.com/v1/playlists/2yGaAFCB7mwH4m5SEKNO5S/tracks?limit=100&offset=" + totalSize, requestOptions)
+    .then(response => response.text())
+    .then(result => {
+        let res = JSON.parse(result);
+        let size = res.items.length;
+        if (size > 0) {
+            for (let i = 0; i < res.items.length; i++) {
+                data.push(res.items[i]);
+            }
+            return loop(totalSize + size);
+        } else {
+            return createNewPlaylist();
+        }
+    })
+    .catch(error => {
+        return 400;
+    });
+}
+
+function createNewPlaylist() {
+    let requestOpt = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify({
+            name: userData[1] + " - SHUFFLED",
+            public: false,
+            collaborative: false
+        }),
+        redirect: 'follow'
+      }
+    fetch("https://api.spotify.com/v1/users/" + userData[0] + "/playlists", requestOpt)
+    .then(response => response.text())
+    .then(result => {
+        //console.log(JSON.parse(result));
+        playListID.push(JSON.parse(result).id);
+        return shuffle();
+    });
+}
+
+function shuffle() {
+    var newOrder = [];
+    for (let i = 0; i < data.length; i++) {
+        newOrder[i] = null;
+    }
+
+    for (let i = 0; i < newOrder.length; i++) {
+        let newIndex = Math.floor(Math.random() * newOrder.length);
+        while (newIndex != -1) {
+            if (newOrder[newIndex] == null) {
+                newOrder[newIndex] = data[i];
+                newIndex = -1;
+            } else {
+                if (newIndex < newOrder.length - 1) {
+                    newIndex++;
+                } else {
+                    newIndex = 0;
+                }
+            }
+        } 
+    }
+    let uris = [];
+    for (let i = 0; i < newOrder.length; i++) {
+        uris.push(newOrder[i].track.uri);
+    }
+    //console.log(playListID[0]);
+    let reqCount = Math.floor(newOrder.length / 100);
+    if (newOrder.length % 100 > 0) {
+        reqCount++;
+    }
+    for (let i = 0; i < reqCount; i++) {
+        let sendURIs = [];
+        for (let j = i *  100; j < i * 100 + 100; j++) {
+            if (uris[j] != undefined) {
+                sendURIs[j - i * 100] = uris[j];
+            }
+        }
+        console.log(sendURIs);
+        console.log(sendURIs.length)
+        let requestOpt = {
+            method: "POST",
+            headers: myHeaders,
+            body: JSON.stringify({
+                uris: sendURIs
+            })
+        };
+        fetch("https://api.spotify.com/v1/playlists/" + playListID[0] + "/tracks", requestOpt)
+        .then(response => response.text())
+        .then(result => {
+            //console.log(JSON.parse(result));
+        })
+    }
+    return 200;
+}
 
 console.log('Listening on $PORT');
 app.listen(process.env.PORT);

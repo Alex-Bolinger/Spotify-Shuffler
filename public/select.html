@@ -1,0 +1,11 @@
+<form onsubmit="select()">
+    <label for="pid">Playlist id:</label>
+    <input type="text" id="pid" name="pid"><br><br>
+    <input type="submit" value="Submit">
+</form>
+<script>
+    function select() {
+        let id = document.getElementById("pid").value;
+        window.location.replace("https://spotify-shuffler3514.herokuapp.com/shuffle?id=" + id);
+    }
+</script>
