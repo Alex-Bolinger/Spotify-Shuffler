@@ -119,10 +119,9 @@ app.get('/', function(req, res) {
 });
 
 app.get('/select', function(req, res) {
-    res.sendFile(app.path() + "select.html", err => {
+    res.sendFile(path.dirname(fileURLToPath(import.meta.url)) + "/public/select.html", err => {
         if (err != null) {
             console.log(err);
-            console.log(app.path());
         }
     })
 })
