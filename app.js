@@ -139,6 +139,7 @@ app.post('/shuffle', function(req, res) {
         redirect: 'follow'
       };
     var userData = [];
+    var data = [];
 
     fetch("https://api.spotify.com/v1/playlists/" + playlistID, requestOptions)
     .then(response => response.text())
@@ -150,7 +151,7 @@ app.post('/shuffle', function(req, res) {
         }
         userData.push(res.owner.id);
         userData.push(res.name);
-        let success = loop(size, requestOptions, myHeaders);
+        let success = loop(size, requestOptions, myHeaders, data, userData);
         res.sendStatus(success);
     })
     .catch(error => {
@@ -183,7 +184,7 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-function loop(totalSize, requestOptions, myHeaders) {
+function loop(totalSize, requestOptions, myHeaders, data, userData) {
     console.log('loop')
     fetch("https://api.spotify.com/v1/playlists/2yGaAFCB7mwH4m5SEKNO5S/tracks?limit=100&offset=" + totalSize, requestOptions)
     .then(response => response.text())
@@ -194,9 +195,9 @@ function loop(totalSize, requestOptions, myHeaders) {
             for (let i = 0; i < res.items.length; i++) {
                 data.push(res.items[i]);
             }
-            return loop(totalSize + size, requestOptions, myHeaders);
+            return loop(totalSize + size, requestOptions, myHeaders, data, userData);
         } else {
-            return createNewPlaylist(myHeaders);
+            return createNewPlaylist(myHeaders, data, userData);
         }
     })
     .catch(error => {
@@ -204,7 +205,7 @@ function loop(totalSize, requestOptions, myHeaders) {
     });
 }
 
-function createNewPlaylist(myHeaders) {
+function createNewPlaylist(myHeaders, data, userData) {
     console.log('make playlist')
     let requestOpt = {
         method: 'POST',
@@ -221,11 +222,11 @@ function createNewPlaylist(myHeaders) {
     .then(result => {
         //console.log(JSON.parse(result));
         playListID.push(JSON.parse(result).id);
-        return shuffle(myHeaders);
+        return shuffle(myHeaders, data);
     });
 }
 
-function shuffle(myHeaders) {
+function shuffle(myHeaders, data) {
     console.log('shuffle')
     var newOrder = [];
     for (let i = 0; i < data.length; i++) {
