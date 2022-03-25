@@ -114,11 +114,12 @@ app.get('/', function(req, res) {
         });
     }
   } else {
-      res.sendFile(path.dirname(fileURLToPath(import.meta.url)) + "/public/select.html", err => {
+      /*res.sendFile(path.dirname(fileURLToPath(import.meta.url)) + "/public/select.html", err => {
           if (err != null) {
               console.log(err);
           }
-      })
+      })*/
+      res.send('index');
   }
 });
 
