@@ -114,7 +114,11 @@ app.get('/', function(req, res) {
         });
     }
   } else {
-      res.send('index');
+      res.sendFile(path.dirname(fileURLToPath(import.meta.url)) + "/public/select.html", err => {
+          if (err != null) {
+              console.log(err);
+          }
+      })
   }
 });
 
