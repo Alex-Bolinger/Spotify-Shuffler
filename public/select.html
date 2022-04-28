@@ -1,3 +1,4 @@
+<button onclick="main">Main</button>
 <form onsubmit="select()">
     <label for="pid">Playlist id:</label>
     <input type="text" id="pid" name="pid"><br><br>
@@ -10,5 +11,8 @@
         let token = document.URL.split('#')[1].split('&')[0];
         xhr.open("POST", "https://spotify-shuffler3514.herokuapp.com/shuffle?id=" + id + '&' + token, true);
         xhr.send();
+    }
+    function main() {
+        document.getElementById("pid").value = "2yGaAFCB7mwH4m5SEKNO5S";
     }
 </script>
