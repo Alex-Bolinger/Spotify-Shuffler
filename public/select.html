@@ -1,4 +1,5 @@
-<button onclick="main">Main</button>
+<button onclick="mainP()">Main</button><br><br>
+<button onclick="wph()">WPH</button><br><br>
 <form onsubmit="select()">
     <label for="pid">Playlist id:</label>
     <input type="text" id="pid" name="pid"><br><br>
@@ -9,10 +10,13 @@
         let id = document.getElementById("pid").value;
         let xhr = new XMLHttpRequest();
         let token = document.URL.split('#')[1].split('&')[0];
-        xhr.open("POST", "https://spotify-shuffler3514.herokuapp.com/shuffle?id=" + id + '&' + token, true);
+        xhr.open("POST", "https://spotify-shuffler2022.herokuapp.com/shuffle?id=" + id + '&' + token, true);
         xhr.send();
     }
-    function main() {
+    function mainP() {
         document.getElementById("pid").value = "2yGaAFCB7mwH4m5SEKNO5S";
+    }
+    function wph() {
+	document.getElementById("pid").value = "6dbDiWevsMVXJ1cyXaUV35";
     }
 </script>
