@@ -9,7 +9,7 @@ import randomString from './helpers/randomString.js'
 
 var client_id = '6efee3b755b94846aea5a6a7cb8bca61'; // Your client id
 var client_secret = '19d6f6eea72649bba6521c67e73bb02b'; // Your secret
-var redirect_uri = 'http://alexserver1031.ddns.net/collect'; // Your redirect uri
+var redirect_uri = 'https://spotify-shuffler.uc.r.appspot.com/callback'; // Your redirect uri
 var stateKey = 'spotify_auth_state';
 var scope = 'user-read-private playlist-modify-private playlist-read-collaborative playlist-read-private playlist-modify-public';
 
