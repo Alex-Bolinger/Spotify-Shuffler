@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url'
 import fetch from 'node-fetch'
 import { Headers } from 'node-fetch';
 import randomString from './helpers/randomString.js'
+import { Worker } from 'worker_threads'
 
 var client_id = '6efee3b755b94846aea5a6a7cb8bca61'; // Your client id
 var client_secret = '19d6f6eea72649bba6521c67e73bb02b'; // Your secret
@@ -93,6 +94,46 @@ app.get('/login', function(req, res) {
         }
         });
     }
+  })
+
+  app.post("/shuffle", function(req,res) {
+    let playlistID = req.query.id;
+    let access_token = req.query.access_token;
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", "Bearer " + access_token);
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+    var userData = [];
+    var data = [];
+    const worker = new Worker("./helpers/shuffle.js");
+
+    fetch("https://api.spotify.com/v1/playlists/" + playlistID, requestOptions)
+    .then(response => response.text())
+    .then(result => {
+        let res = JSON.parse(result);
+        let size = res.tracks.items.length;
+        for (let i = 0; i < res.tracks.items.length; i++) {
+            data.push(res.tracks.items[i]);     
+        }
+        userData.push(res.owner.id);
+        userData.push(res.name);
+        userData.push(playlistID);
+        worker.postMessage([size, requestOptions, myHeaders, data, userData]);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+
+    console.log("started shuffle");
+    worker.on("message", (msg) => {
+        console.log("shuffle completed");
+    });
+    res.redirect("/select");
   })
 
 
