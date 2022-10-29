@@ -87,7 +87,7 @@ app.get('/login', function(req, res) {
                 refresh_token: refresh_token
             }));
         } else {
-            res.redirect('/#' +
+            res.redirect('/select#' +
             querystring.stringify({
                 error: 'invalid_token'
             }));
