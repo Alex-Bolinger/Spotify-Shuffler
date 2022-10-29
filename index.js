@@ -44,7 +44,7 @@ app.get('/login', function(req, res) {
     var storedState = req.cookies ? req.cookies[stateKey] : null;
 
     if (state === null || state !== storedState) {
-        res.redirect('/#' +
+        res.redirect('/select#' +
         querystring.stringify({
             error: 'state_mismatch'
         }));
