@@ -1,12 +1,14 @@
 import express from 'express' // Express web server framework
 import request from 'request' // "Request" library
 import querystring from 'querystring'
+import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import fetch from 'node-fetch'
 import { Headers } from 'node-fetch';
 import randomString from './helpers/randomString.js'
 import { Worker } from 'worker_threads'
+import cookieParser from 'cookie-parser'
 
 var client_id = '6efee3b755b94846aea5a6a7cb8bca61'; // Your client id
 var client_secret = '19d6f6eea72649bba6521c67e73bb02b'; // Your secret
@@ -16,7 +18,7 @@ var scope = 'user-read-private playlist-modify-private playlist-read-collaborati
 
 var app = express();
 
-app.use(express.static(path.dirname(fileURLToPath(import.meta.url)) + '/public'));
+app.use(express.static(path.dirname(fileURLToPath(import.meta.url)) + '/public')).use(cors()).use(cookieParser);
 
 app.get("/", function(req,res) {
     res.redirect("/login");
