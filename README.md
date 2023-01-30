@@ -12,3 +12,15 @@ This app was created after noticing several different bugs revolving around Spot
 <li> If you go back to Spotify and view your playlists, you should find a new playlist with the same name as the previous one with "- SHUFFLED" added on the end.</li>
 <li> Turn of shuffle and enjoy :)</li>
 </ol>
+
+<h3>Future Features</h3>
+<ul>
+<li>Proper homepage</li>
+<li>Styling with react</li>
+<li>Optionally replace playlists rather than adding new ones</li>
+<li>Mobile app</li>
+<li>Playback control</li>
+</ul>
+
+<h3>Disclaimer</h3>
+This app is still under development and thus has a restricted user count that can access the Spotify API calls this app uses. Because of this, access to this app must be granted individually by an admin.
