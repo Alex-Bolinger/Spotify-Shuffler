@@ -1,24 +1,19 @@
 <title>Spotify Shuffler</title>
 
-<button onclick="mainP()">Main</button><br><br>
-<button onclick="wph()">WPH</button><br><br>
 <form onsubmit="select()">
-    <label for="pid">Playlist id:</label>
-    <input type="text" id="pid" name="pid"><br><br>
+    <label for="link">Playlist link:</label>
+    <input type="text" id="id" name="id"><br><br>
     <input type="submit" value="Submit">
 </form>
 <script>
     function select() {
-        let id = document.getElementById("pid").value;
+        let link = document.getElementById("id").value;
+        let sections = link.split("/");
+        let id = sections[sections.length-1].split("?")[0];
+        console.log(id);
         let xhr = new XMLHttpRequest();
         let token = document.URL.split('#')[1].split('&')[0];
         xhr.open("POST", "https://spotify-shuffler.uc.r.appspot.com/shuffle?id=" + id + '&' + token, true);
         xhr.send();
-    }
-    function mainP() {
-        document.getElementById("pid").value = "2yGaAFCB7mwH4m5SEKNO5S";
-    }
-    function wph() {
-	document.getElementById("pid").value = "6dbDiWevsMVXJ1cyXaUV35";
     }
 </script>
