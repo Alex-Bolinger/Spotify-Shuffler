@@ -8,9 +8,13 @@ import { fileURLToPath } from 'url'
 import fetch from 'node-fetch'
 import { Headers } from 'node-fetch';
 import { FormData } from 'node-fetch';
+import fs from 'fs';
 
-var client_id = '6efee3b755b94846aea5a6a7cb8bca61'; // Your client id
-var client_secret = '19d6f6eea72649bba6521c67e73bb02b'; // Your secret
+
+let raw = fs.readFileSync('./keys.json');
+let keys = JSON.parse(raw);
+var client_id = keys.client_id; // Your client id
+var client_secret = keys.client_secret; // Your secret
 var redirect_uri = 'https://spotify-shuffler.uc.r.appspot.com/'; // Your redirect uri
 
 /**
